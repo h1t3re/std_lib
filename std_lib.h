@@ -1,0 +1,13 @@
+void *convert_integer_to_binary(int *array, int mask, const int number);
+int convert_hexa_to_int(char hexa);
+void convert_hexa_to_binary(int *array, int mask, char hexa);
+const int shift_mask_left(const int mask, const int i);
+const int shift_result_right(const int number, const int i);
+const int and_operation(const int number, const int mask_shifted);
+char *read_input();
+char *read_file(char *file_name);
+int strncmp(const char *str1, const char *str2);
+char *strdup(const char *str);
+unsigned int strlen(const char *str);
+int strcontains(const char *str1, const char *str2);
+char **split(char *buffer, char *separator);
