@@ -1,5 +1,47 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
+
+int strncmp(const char *str1, const char *str2)
+{
+	int i = 0;
+	while((*(str1+i) != '\0') & (*(str2+i) != '\0'))
+	{
+		if(*(str1+i) != *(str2+i))
+			return 1;
+		i = i +1;
+	}
+	if(((*(str1+i) != '\0') & (*(str2+i) == '\0')) | ((*(str1+i) == '\0') & (*(str2+i) != '\0')))
+	       return 1;	
+	return 0;
+}
+
+unsigned int strlen(const char *str)
+{
+	unsigned int len = 0;
+	while(*(str+len) != '\0')
+		len = len +1;
+	return len +1;
+}
+
+char *strdup(const char *str)
+{
+	int len = 0;
+	while(*(str+len) != '\0')
+		len = len +1;
+	len = len +1;
+
+	char *duplicat_of_str = (char *)malloc(len*sizeof(char));
+	len = 0;
+	
+	while(*(str+len) != '\0')
+	{
+		*(duplicat_of_str+len) = *(str+len);
+		len = len +1;
+	}
+	*(duplicat_of_str+len) = *(str+len);
+	return duplicat_of_str;
+}
 
 char *read_input()
 {
@@ -45,47 +87,6 @@ char *read_file(char *file_name)
 	*(buffer+buffer_len) = '\0';
 	close(fd);
 	return buffer;
-}
-
-int strncmp(const char *str1, const char *str2)
-{
-	int i = 0;
-	while((*(str1+i) != '\0') & (*(str2+i) != '\0'))
-	{
-		if(*(str1+i) != *(str2+i))
-			return 1;
-		i = i +1;
-	}
-	if(((*(str1+i) != '\0') & (*(str2+i) == '\0')) | ((*(str1+i) == '\0') & (*(str2+i) != '\0')))
-	       return 1;	
-	return 0;
-}
-
-unsigned int strlen(const char *str)
-{
-	unsigned int len = 0;
-	while(*(str+len) != '\0')
-		len = len +1;
-	return len +1;
-}
-
-char *strdup(const char *str)
-{
-	int len = 0;
-	while(*(str+len) != '\0')
-		len = len +1;
-	len = len +1;
-
-	char *duplicat_of_str = (char *)malloc(len*sizeof(char));
-	len = 0;
-	
-	while(*(str+len) != '\0')
-	{
-		*(duplicat_of_str+len) = *(str+len);
-		len = len +1;
-	}
-	*(duplicat_of_str+len) = *(str+len);
-	return duplicat_of_str;
 }
 
 int strcontains(const char *str1, const char *str2)
@@ -139,58 +140,47 @@ int strcontains(const char *str1, const char *str2)
 	return 1;
 }
 
-char **split(char *buffer, char *separator)
+char **split(char *buffer, char *spliter)
 {
+	char **array = (char **)malloc(sizeof(char *));
 	int i = 0;
 	int j = 0;
-	int v = 0;
-	int backup_i = 0;
-	int array_len = 0;
-	char *data = (char *)malloc(strlen(buffer)*sizeof(char));
-	char **array = (char **)malloc(sizeof(char *));
+	int k = 0;
+	char *str0 = (char *)malloc(sizeof(char));
 	char *str1 = (char *)malloc(2*sizeof(char));
-	char *str2 = (char *)malloc(2*sizeof(char));
-	while(i < strlen(buffer))
+	array[k] = (char *)malloc(sizeof(char));
+	while(i <= strlen(spliter))
 	{
-		*(data+(i*sizeof(char))) = *(buffer+(i*sizeof(char)));
+		str0[i] = spliter[i];
 		i = i +1;
+		str0 = (char *)realloc(str0, (i+1)*sizeof(char));
 	}
 	i = 0;
-	while(i < strlen(data))
+	while(i <= strlen(buffer))
 	{
-		backup_i = i;
-		*str1 = *(data+(i*sizeof(char)));
-		*(str1+1) = '\0';
-		*str2 = *separator;
-		*(str2+1) = '\0';
-		j = 0;
-		while(strncmp(str1, str2) != 0)
+		str1[0] = buffer[i];
+		str1[1] = '\0';
+		if((strncmp(str0, str1) != 0) & (buffer[i] != '\0'))
 		{
-			i = i +1;
-			*str1 = *(data+(i*sizeof(char)));
-			*(str1+1) = '\0';
+			array[k][j] = buffer[i];
 			j = j +1;
-		}
-		array[array_len] = (char *)malloc((j+1)*sizeof(char));
-		v = 0;
-		while(v < j)
-		{
-			*(array[array_len]+(v*sizeof(char))) = *(data+((backup_i+v)*sizeof(char)));
-			v = v +1;
-		}
-		*(array[array_len]+(v*sizeof(char))) = '\0';
-		if(strncmp(str1, str2) == 0){
-			while(strncmp(str1, str2) == 0)
+			array[k] = (char *)realloc(array[k], (j+1)*sizeof(char));
+		}else{
+			array[k][j] = '\0';
+			j = 0;
+			while((buffer[i] == spliter) & (buffer[i] != '\0'))
 			{
+				str1[0] = buffer[i];
+				str1[1] = '\0';
 				i = i +1;
-				*str1 = *(data+(i*sizeof(char)));
-				*(str1+1) = '\0';
 			}
-			array_len = array_len +1;
-			array = (char **)realloc(array, (array_len+1)*sizeof(char *));
+			k = k +1;
+			array = (char **)realloc(array, (k+1)*sizeof(char *));
+			array[k] = (char *)malloc(sizeof(char));
 		}
+		i = i +1;
 	}
-	array[array_len] = "\0";
+	array[k][0] = '\0';
 	return array;
 }
 
