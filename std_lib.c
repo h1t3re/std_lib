@@ -146,6 +146,7 @@ char **split(char *buffer, char *spliter)
 	int i = 0;
 	int j = 0;
 	int k = 0;
+	int v = 0;
 	char *str0 = (char *)malloc(sizeof(char));
 	char *str1 = (char *)malloc(2*sizeof(char));
 	array[k] = (char *)malloc(sizeof(char));
@@ -155,6 +156,7 @@ char **split(char *buffer, char *spliter)
 		i = i +1;
 		str0 = (char *)realloc(str0, (i+1)*sizeof(char));
 	}
+	str0[i] = '\0';
 	i = 0;
 	while(i <= strlen(buffer))
 	{
@@ -170,8 +172,6 @@ char **split(char *buffer, char *spliter)
 			j = 0;
 			while((buffer[i] == spliter) & (buffer[i] != '\0'))
 			{
-				str1[0] = buffer[i];
-				str1[1] = '\0';
 				i = i +1;
 			}
 			k = k +1;
