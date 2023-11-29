@@ -160,6 +160,10 @@ char **split(char *buffer, char *spliter)
 	i = 0;
 	while(i <= strlen(buffer))
 	{
+		while((buffer[i] == spliter) & (buffer[i] != '\0'))
+		{
+			i = i +1;
+		}
 		str1[0] = buffer[i];
 		str1[1] = '\0';
 		if((strncmp(str0, str1) != 0) & (buffer[i] != '\0'))
@@ -168,15 +172,14 @@ char **split(char *buffer, char *spliter)
 			j = j +1;
 			array[k] = (char *)realloc(array[k], (j+1)*sizeof(char));
 		}else{
-			array[k][j] = '\0';
-			j = 0;
-			while((buffer[i] == spliter) & (buffer[i] != '\0'))
+			if(j >= 1)
 			{
-				i = i +1;
+				array[k][j] = '\0';
+				k = k +1;
+				array = (char **)realloc(array, (k+1)*sizeof(char *));
+				array[k] = (char *)malloc(sizeof(char));
 			}
-			k = k +1;
-			array = (char **)realloc(array, (k+1)*sizeof(char *));
-			array[k] = (char *)malloc(sizeof(char));
+			j = 0;
 		}
 		i = i +1;
 	}
