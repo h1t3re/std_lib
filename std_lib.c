@@ -27,19 +27,19 @@ unsigned int strlen(const char *str)
 char *strdup(const char *str)
 {
 	int len = 0;
+	int i = 0;
 	while(*(str+len) != '\0')
 		len = len +1;
 	len = len +1;
 
 	char *duplicat_of_str = (char *)malloc(len*sizeof(char));
-	len = 0;
 	
-	while(*(str+len) != '\0')
+	while(i < len)
 	{
-		*(duplicat_of_str+len) = *(str+len);
-		len = len +1;
+		duplicat_of_str[i] = str[i];
+		i = i +1;
 	}
-	*(duplicat_of_str+len) = *(str+len);
+	duplicat_of_str[len] = str[len];
 	return duplicat_of_str;
 }
 
@@ -138,6 +138,57 @@ int strcontains(const char *str1, const char *str2)
 		i = i +1;
 	}
 	return 1;
+}
+
+char **s(char *buffer, char *spliter)
+{
+	char **array = (char **)malloc(sizeof(char *));
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	int v = 0;
+	char *str0 = (char *)malloc(sizeof(char));
+	char *str1 = (char *)malloc(strlen(spliter)*sizeof(char));
+	array[k] = (char *)malloc(sizeof(char));
+	while(i <= strlen(spliter))
+	{
+		str0[i] = spliter[i];
+		i = i +1;
+		str0 = (char *)realloc(str0, (i+1)*sizeof(char));
+	}
+	str0[i] = '\0';
+	i = 0;
+	while(i <= strlen(buffer))
+	{
+		v = 0;
+		while(v < strlen(spliter))
+		{
+			str1[v] = buffer[i+v];
+			v = v +1;
+		}
+		while((strncmp(str0, str1) == 0) & (buffer[i] != '\0'))
+		{
+			i = i +1;
+		}
+		if((strncmp(str0, str1) != 0) & (buffer[i] != '\0'))
+		{
+			array[k][j] = buffer[i];
+			j = j +1;
+			array[k] = (char *)realloc(array[k], (j+1)*sizeof(char));
+		}else{
+			if(j >= 1)
+			{
+				array[k][j] = '\0';
+				k = k +1;
+				array = (char **)realloc(array, (k+1)*sizeof(char *));
+				array[k] = (char *)malloc(sizeof(char));
+			}
+			j = 0;
+		}
+		i = i +1;
+	}
+	array[k][0] = '\0';
+	return array;
 }
 
 char **split(char *buffer, char *spliter)
