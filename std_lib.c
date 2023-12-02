@@ -137,6 +137,7 @@ int strcontains(const char *str1, const char *str2)
 	{
 		//Running the small string with j
 		j = 0;
+		//Comparing array1 and array2 with the length of array2
 		while((array1[i+j] == (array2[j])) & (array2[j] != '\0'))
 			j = j + 1;
 		//If it compare the two running and we find the length of the small one return zero
