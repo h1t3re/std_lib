@@ -99,6 +99,66 @@ int strcontains(const char *str1, const char *str2)
 	char *array2;
 	char *tmp;
 	int tmp0 = 0;
+	//Counting of the length of the two strings
+	while(strlen_array1 < strlen(str1))
+		strlen_array1 = strlen_array1 +1;
+	while(strlen_array2 < strlen(str2))
+		strlen_array2 = strlen_array2 +1;
+	//Malloc of the two strings
+       	array1 = (char *)malloc(strlen_array1*sizeof(char));
+       	array2 = (char *)malloc(strlen_array2*sizeof(char));
+	
+	//Copying of the two strings in allocated memory
+	while(i < strlen_array1)
+	{
+		array1[i] = str1[i];
+		i = i +1;
+	}
+	i = 0;
+	while(i < strlen_array2)
+	{
+		array2[i] = str2[i];
+		i = i +1;
+	}
+	//Inverting if in need the big and the small strings
+	if(strlen_array1 < strlen_array2)
+	{
+		tmp = strdup(array1);
+		array1 = strdup(array2);
+		array2 = tmp;
+		tmp0 = strlen_array1;
+		strlen_array1 = strlen_array2;
+		strlen_array2 = tmp0;
+	}
+	//Begin comparaison
+	//Running the big string with i
+	i = 0;
+	while(array1[i] != '\0')
+	{
+		//Running the small string with j
+		j = 0;
+		while((array1[i+j] == (array2[j])) & (array2[j] != '\0'))
+			j = j + 1;
+		//If it compare the two running and we find the length of the small one return 0
+		if(j == strlen_array2)
+			return 0;
+		i = i +1;
+	}
+	//If their is no small string in the big  one return 1
+	return 1;
+
+
+
+int strcontains_backup(const char *str1, const char *str2)
+{
+	int i = 0;
+	int j = 0;
+	int strlen_array1 = 0;
+	int strlen_array2 = 0;
+	char *array1;
+	char *array2;
+	char *tmp;
+	int tmp0 = 0;
 	while(strlen_array1 < strlen(str1))
 		strlen_array1 = strlen_array1 +1;
 	while(strlen_array2 < strlen(str2))
@@ -160,63 +220,16 @@ char **s(char *buffer, char *spliter)
 	i = 0;
 	while(i <= strlen(buffer))
 	{
-		v = 0;
-		while(v < strlen(spliter))
-		{
-			str1[v] = buffer[i+v];
-			v = v +1;
-		}
 		while((strncmp(str0, str1) == 0) & (buffer[i] != '\0'))
 		{
 			i = i +1;
 		}
-		if((strncmp(str0, str1) != 0) & (buffer[i] != '\0'))
+		v = 0;
+		while((v < strlen(spliter)) & (buffer[i+v] != '\0'))
 		{
-			array[k][j] = buffer[i];
-			j = j +1;
-			array[k] = (char *)realloc(array[k], (j+1)*sizeof(char));
-		}else{
-			if(j >= 1)
-			{
-				array[k][j] = '\0';
-				k = k +1;
-				array = (char **)realloc(array, (k+1)*sizeof(char *));
-				array[k] = (char *)malloc(sizeof(char));
-			}
-			j = 0;
+			str1[v] = buffer[i+v];
+			v = v +1;
 		}
-		i = i +1;
-	}
-	array[k][0] = '\0';
-	return array;
-}
-
-char **split(char *buffer, char *spliter)
-{
-	char **array = (char **)malloc(sizeof(char *));
-	int i = 0;
-	int j = 0;
-	int k = 0;
-	int v = 0;
-	char *str0 = (char *)malloc(sizeof(char));
-	char *str1 = (char *)malloc(2*sizeof(char));
-	array[k] = (char *)malloc(sizeof(char));
-	while(i <= strlen(spliter))
-	{
-		str0[i] = spliter[i];
-		i = i +1;
-		str0 = (char *)realloc(str0, (i+1)*sizeof(char));
-	}
-	str0[i] = '\0';
-	i = 0;
-	while(i <= strlen(buffer))
-	{
-		while((buffer[i] == spliter) & (buffer[i] != '\0'))
-		{
-			i = i +1;
-		}
-		str1[0] = buffer[i];
-		str1[1] = '\0';
 		if((strncmp(str0, str1) != 0) & (buffer[i] != '\0'))
 		{
 			array[k][j] = buffer[i];
