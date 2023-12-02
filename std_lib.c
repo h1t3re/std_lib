@@ -139,14 +139,14 @@ int strcontains(const char *str1, const char *str2)
 		j = 0;
 		while((array1[i+j] == (array2[j])) & (array2[j] != '\0'))
 			j = j + 1;
-		//If it compare the two running and we find the length of the small one return 0
+		//If it compare the two running and we find the length of the small one return zero
 		if(j == strlen_array2)
 			return 0;
 		i = i +1;
 	}
-	//If their is no small string in the big  one return 1
+	//If their is no small string in the big  one return one
 	return 1;
-
+}
 
 
 int strcontains_backup(const char *str1, const char *str2)
