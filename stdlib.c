@@ -229,7 +229,7 @@ char **strsplit(char *str, char *spliter)
 	return array;
 }
 
-char *snprintf(int size, char *string, NULL **variables)
+/*char *snprintf(int size, char *string, NULL **variables)
 {
 	char *s = strsplit(string, strdup("%\0"));
 	int counter = 0;
@@ -255,7 +255,7 @@ char *snprintf(int size, char *string, NULL **variables)
 	}
 	return strdup(result);
 }
-
+*/
 char *get_data_by_key_until_end(const char *restrict buffer, char *key, char *end)
 {
 	char *cmp = (char *)malloc(strlen(key)*sizeof(char));
