@@ -222,6 +222,9 @@ char **strsplit(char *str, char *spliter)
 		}
 		dd_0((void *)data, 0, spliter_length);
 	}
+	a = a +1;
+        array = (char **)realloc(array, (a+1)*sizeof(char *));
+        array[a] = (char *)malloc(sizeof(char));
 	array[a] = '\0';
 	return array;
 }
