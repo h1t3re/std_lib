@@ -203,7 +203,6 @@ char **strsplit(char *str, char *spliter)
                         buffer = (char *)realloc(buffer, (c+1)*sizeof(char));
                 }
                 data[j] = '\0';
-                printf("data[%d] = %s\n", j, data);
                 if(strcmp(data, spliter) == 0)
                 {
                         buffer[c] = '\0';
