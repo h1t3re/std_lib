@@ -185,7 +185,7 @@ char **get_data_by_key(char *buffer, char *key, int number_of_lines)
 char **strsplit(char *str, char *spliter)
 {
         char **array = (char **)malloc(sizeof(char *));
-        char *data = (char *)malloc(strlen(spliter)*sizeof(char));
+        char *data = (char *)malloc((strlen(spliter)+1)*sizeof(char));
         char *buffer = (char *)malloc(sizeof(char));
         int c = 0;
         int i = 0;
@@ -194,7 +194,7 @@ char **strsplit(char *str, char *spliter)
         int spliter_length = strlen(spliter);
         while(str[i] != '\0')
         {
-                while((j < spliter_length) & (str[i+j] != '\0') )
+                while((j < spliter_length) & (str[i+j] != '\0'))
                 {
                         data[j] = str[i+j];
                         buffer[c] = str[i+j];
@@ -203,6 +203,7 @@ char **strsplit(char *str, char *spliter)
                         buffer = (char *)realloc(buffer, (c+1)*sizeof(char));
                 }
                 data[j] = '\0';
+                printf("data[%d] = %s\n", j, data);
                 if(strcmp(data, spliter) == 0)
                 {
                         buffer[c] = '\0';
@@ -217,7 +218,7 @@ char **strsplit(char *str, char *spliter)
                         buffer = (char *)malloc(sizeof(char));
                 }else if(strcmp(data, spliter) == 1)
                 {
-                        i = i +j;
+                        i = i +1;
                         j = 0;
                 }
                 dd_0((void *)data, 0, spliter_length);
