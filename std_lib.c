@@ -494,3 +494,29 @@ void write_to_file(char *file_name, char *buffer)
                 buffer_len = buffer_len +1;
         }
 }
+
+char *random_string()
+{
+        char *alphabets = (char *)malloc(26*sizeof(char));
+        char *a = "abcdefghijklmnopqrstuvwxyz";
+        int x = 10;
+        char *string = (char *)malloc(x*sizeof(char));
+        int i = 0;
+        while(i < 26)
+        {
+                alphabets[i] = a[i];
+                i = i +1;
+        }
+        int r;
+        i = 0;
+                srand(time(NULL));
+        while(i < x)
+        {
+                r = rand();
+                r = r % 26;
+                string[i] = a[r];
+                i = i +1;
+        }
+        string[i] = '\0';
+        return string;
+}
