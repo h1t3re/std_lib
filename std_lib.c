@@ -231,6 +231,39 @@ char **strsplit(char *str, char *spliter)
         array[a] = '\0';
         return array;
 }
+
+char **strsplit_v1(const char *string, const char *spliter)
+{
+        char **array = (char **)malloc(sizeof(char *));
+        char *buffer;
+        int i = 0;
+        int j = 1;
+        int k = find_string_position(strdup(string), strdup(spliter), j);
+        int a = 0;
+        int c = 0;
+        while(string[i] != '\0')
+        {
+                i = i -1;
+                buffer = (char *)malloc(sizeof(char));
+                while((i < k) & (string[i] != '\0'))
+                {
+                        buffer[c] = string[i];
+                        c = c +1;
+                        i = i +1;
+                        buffer = (char *)realloc(buffer, (c+1)*sizeof(char));
+                }
+                buffer[c] = '\0';
+                array[a] = strdup(buffer);
+                j = j +1;
+                k = find_string_position(strdup(string), strdup(spliter), j);
+                c = 0;
+                a = a +1;
+                array = (char **)realloc(array, (a+1)*sizeof(char *));
+                i = i +1;
+        }
+        array[a] = '\0';
+        return array;
+}
 /*
 char *snprintf(int size, char *string, NULL **variables)
 {
