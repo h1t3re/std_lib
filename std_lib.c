@@ -243,7 +243,6 @@ char **strsplit_v1(const char *string, const char *spliter)
         int c = 0;
         while(string[i] != '\0')
         {
-                i = i -1;
                 buffer = (char *)malloc(sizeof(char));
                 while((i < k) & (string[i] != '\0'))
                 {
