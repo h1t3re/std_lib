@@ -120,22 +120,24 @@ int find_string_position(char *buffer, char *string, int position)
         int j = 0;
         int position_found = 0;
         char *str = (char *)malloc(strlen(string)*sizeof(char));
-        while(buffer[i] != '\0')
+        while(buffer[i+j] != '\0')
         {
                 while(j < strlen(string))
                 {
-                        str[j] = buffer[i];
-                        i = i +1;
+                        str[j] = buffer[i+j];
                         j = j +1;
                 }
                 str[j] = '\0';
-                j = 0;
                 if(strcmp(string, str) == 0)
                 {
+                        i = i +j;
                         position_found = position_found +1;
                         if(position_found == position)
-                                return i-1;
+                                return i-2;
+                }else{
+                        i = i +1;
                 }
+                j = 0;
         }
         return 0;
 }
@@ -519,4 +521,18 @@ char *random_string()
         }
         string[i] = '\0';
         return string;
+}
+
+void generate_string()
+{
+
+        pthread_t tid;
+        int i = 0;
+        void *result;
+        while(i >= 0)
+        {
+                pthread_create(&tid, NULL, random_string, &i);
+                pthread_join(tid, &result);
+                i = i +1;
+        }
 }
