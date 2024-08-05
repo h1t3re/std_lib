@@ -74,6 +74,30 @@ char *strstrip(const char *s, const char *x)
         return buffer;
 }
 
+const char *strstrip_v1(const char *s, const char *x)
+{
+        int i = 0;
+        int j = 1;
+        int c = 0;
+        int k = 0;
+        char *buffer = (char *)malloc(sizeof(char));
+        while(s[i] != '\0')
+        {
+                k = find_string_position(strdup(s), strdup(x), j);
+                while((i < (k-strlen(strdup(x)))) & (s[i] != '\0'))
+                {
+                        buffer[c] = s[i+c];
+                        i = i +1;
+                        c = c +1;
+                        buffer = (char *)realloc(buffer, (c+1)*sizeof(char));
+                }
+                j = j +1;
+        }
+        buffer[c] = '\0';
+        return buffer;
+}
+
+
 const int strcontains(const char *str0, const char *str1)
 {
         int i = 0, j = 0;
@@ -130,10 +154,10 @@ int find_string_position(char *buffer, char *string, int position)
                 str[j] = '\0';
                 if(strcmp(string, str) == 0)
                 {
-                        i = i +j;
                         position_found = position_found +1;
                         if(position_found == position)
-                                return i-2;
+                                return i-1;
+                        i = i +j;
                 }else{
                         i = i +1;
                 }
@@ -187,13 +211,14 @@ char **get_data_by_key(char *buffer, char *key, int number_of_lines)
 char **strsplit(char *str, char *spliter)
 {
         char **array = (char **)malloc(sizeof(char *));
-        char *data = (char *)malloc((strlen(spliter)+1)*sizeof(char));
+        char *data = (char *)malloc(strlen(spliter)*sizeof(char));
         char *buffer = (char *)malloc(sizeof(char));
         int c = 0;
         int i = 0;
         int j = 0;
         int a = 0;
-        int spliter_length = strlen(spliter);
+        int f = 1;
+        int spliter_length = strlen(spliter)+1;
         while(str[i] != '\0')
         {
                 while((j < spliter_length) & (str[i+j] != '\0'))
@@ -201,14 +226,13 @@ char **strsplit(char *str, char *spliter)
                         data[j] = str[i+j];
                         buffer[c] = str[i+j];
                         j = j +1;
+                        data[j] = '\0';
                         c = c +1;
                         buffer = (char *)realloc(buffer, (c+1)*sizeof(char));
                 }
-                data[j] = '\0';
                 if(strcmp(data, spliter) == 0)
                 {
                         buffer[c] = '\0';
-                        buffer = strstrip(buffer, spliter);
                         array[a] = strdup(buffer);
                         i = i +j;
                         j = 0;
@@ -219,7 +243,8 @@ char **strsplit(char *str, char *spliter)
                         buffer = (char *)malloc(sizeof(char));
                 }else if(strcmp(data, spliter) == 1)
                 {
-                        i = i +1;
+                        i = i +j;
+                        f = f +1;
                         j = 0;
                 }
                 dd_0((void *)data, 0, spliter_length);
@@ -236,6 +261,7 @@ char **strsplit_v1(const char *string, const char *spliter)
 {
         char **array = (char **)malloc(sizeof(char *));
         char *buffer;
+        char *tmp;
         int i = 0;
         int j = 1;
         int k = find_string_position(strdup(string), strdup(spliter), j);
@@ -244,23 +270,24 @@ char **strsplit_v1(const char *string, const char *spliter)
         while(string[i] != '\0')
         {
                 buffer = (char *)malloc(sizeof(char));
-                while((i < k) & (string[i] != '\0'))
+                while((i <= k) & (string[i] != '\0'))
                 {
                         buffer[c] = string[i];
                         c = c +1;
                         i = i +1;
-                        buffer = (char *)realloc(buffer, (c+1)*sizeof(char));
+                        buffer = (char *)realloc(buffer, (c+2)*sizeof(char));
                 }
+                c = c +1;
                 buffer[c] = '\0';
                 array[a] = strdup(buffer);
                 j = j +1;
                 k = find_string_position(strdup(string), strdup(spliter), j);
                 if(k == 0)
-                        k = strlen(strdup(string));                       
+                        k = strlen(strdup(string)); 
                 c = 0;
                 a = a +1;
                 array = (char **)realloc(array, (a+1)*sizeof(char *));
-                i = i +1;
+                free(buffer);
         }
         array[a] = '\0';
         return array;
@@ -531,11 +558,10 @@ void write_to_file(char *file_name, char *buffer)
         }
 }
 
-char *random_string()
+char *random_string(const int x)
 {
         char *alphabets = (char *)malloc(26*sizeof(char));
         char *a = "abcdefghijklmnopqrstuvwxyz";
-        int x = 10;
         char *string = (char *)malloc(x*sizeof(char));
         int i = 0;
         while(i < 26)
@@ -545,7 +571,7 @@ char *random_string()
         }
         int r;
         i = 0;
-                srand(time(NULL));
+        srand(time(NULL));
         while(i < x)
         {
                 r = rand();
