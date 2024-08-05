@@ -255,6 +255,8 @@ char **strsplit_v1(const char *string, const char *spliter)
                 array[a] = strdup(buffer);
                 j = j +1;
                 k = find_string_position(strdup(string), strdup(spliter), j);
+                if(k == 0)
+                        k = strlen(strdup(string));                       
                 c = 0;
                 a = a +1;
                 array = (char **)realloc(array, (a+1)*sizeof(char *));
