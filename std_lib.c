@@ -621,15 +621,16 @@ void *traitment_on_the_fly_injection()
         pthread_t tid;
         void *result0;
         int *result1 = (int *)malloc(sizeof(int));
-        function = n_dot_2;
+        function = (int *)(*n_dot_2)(int *);
         while(1)
         {
                 pthread_create(&tid, NULL, read_io, NULL);
                 pthread_join(tid, &name);
+                printf("name of function of traitment = %s\n", (char *)name);
                 if(strcmp(strdup((char *)name), strdup("n_dot_2\0")) == 0)
-                        function = n_dot_2;
+                        function = (int *)(*n_dot_2)(int *);
                 else if(strcmp(strdup((char *)name), strdup("n_dot_3\0")) == 0)
-                        function = n_dot_3;
+                        function = (int *)(*n_dot_3)(int *);
                 pthread_create(&tid, NULL, function, &i);
                 pthread_join(tid, &result1);
                 printf("result[%d] = %d\n", i, (int *)result1);
