@@ -267,6 +267,7 @@ char **strsplit_v1(const char *string, const char *spliter)
         int k = find_string_position(strdup(string), strdup(spliter), j);
         int a = 0;
         int c = 0;
+        int vk = 0;
         while(string[i] != '\0')
         {
                 buffer = (char *)malloc(sizeof(char));
@@ -277,7 +278,12 @@ char **strsplit_v1(const char *string, const char *spliter)
                         i = i +1;
                         buffer = (char *)realloc(buffer, (c+2)*sizeof(char));
                 }
-                c = c +1;
+                if((k > i+strlen(strdup(spliter))) & (vk == 0))
+                {
+                        k = k-strlen(strdup(spliter));
+                        vk = 1;
+                }
+                i = i + strlen(strdup(spliter));
                 buffer[c] = '\0';
                 array[a] = strdup(buffer);
                 j = j +1;
