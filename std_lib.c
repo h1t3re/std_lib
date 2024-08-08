@@ -638,3 +638,57 @@ void *traitment_on_the_fly_injection()
                 free(name);
         }
 }
+
+int n_by_2(int n)
+{
+        return 2*n;
+}
+
+int n_by_3(int n)
+{
+        return 3*n;
+}
+
+void interprocess_communication_with_injection()
+{
+        int fd0[2];
+        int fd1[2];
+        int pid;
+        char *name;
+        char *buffer = (char *)malloc(sizeof(char));
+        int i = 1;
+        int result = 0;
+        int nbytes = 0;
+        pid = fork();
+        if(pid == 0)
+        {
+                pipe(fd0);
+                while(1)
+                {
+                        name = read_io();
+                        write(fd1[0], name, sizeof(name));
+                        free(name);
+                }
+        }else if(pid > 0){
+                pipe(fd1);
+                while(1)
+                {
+                        while(read(fd0[1], &buffer[nbytes], sizeof(char)) > 0)
+                        {
+                                nbytes++;
+                                buffer = (char *)realloc(buffer, nbytes+1);
+                        }
+                        buffer[nbytes] = '\0';
+                        if(strcmp(buffer, "n_dot_2\n\0") == 0)
+                        {
+                                result = n_dot_2(i);
+                        }else if(strcmp(buffer, "n_dot_3\n\0") == 0)
+                        {
+                                result = n_dot_3(i);
+                        }
+                        printf("result[%d] = %d\n", i, result);
+                        i = i +1;
+                }
+        }
+        return 0;
+}
