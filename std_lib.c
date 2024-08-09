@@ -666,8 +666,14 @@ void interprocess_communication_with_injection()
                 while(1)
                 {
                         name = read_io();
-                        write(fd1[0], name, sizeof(name));
+                        printf("%s\n", name);
+                        while(name[nbytes] != '\0')
+                        {
+                                write(fd1[0], &name[nbytes], sizeof(char));
+                                nbytes++;
+                        }
                         free(name);
+                        nbytes = 0;
                 }
         }else if(pid > 0){
                 pipe(fd1);
@@ -679,16 +685,19 @@ void interprocess_communication_with_injection()
                                 buffer = (char *)realloc(buffer, nbytes+1);
                         }
                         buffer[nbytes] = '\0';
-                        if(strcmp(buffer, "n_dot_2\n\0") == 0)
+                        printf("buffer = \"%s\"\n", buffer);
+                        nbytes = 0;
+                        if(strcmp(buffer, "n_by_2\n\0") == 0)
                         {
-                                result = n_dot_2(i);
-                        }else if(strcmp(buffer, "n_dot_3\n\0") == 0)
+                                result = n_by_2(i);
+                                printf("%d\n", result);
+                        }else if(strcmp(buffer, "n_by_3\n\0") == 0)
                         {
-                                result = n_dot_3(i);
+                                result = n_by_3(i);
+                                printf("%d\n", result);
                         }
                         printf("result[%d] = %d\n", i, result);
                         i = i +1;
                 }
         }
-        return 0;
 }
