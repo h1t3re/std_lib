@@ -656,22 +656,24 @@ void interprocess_communication_with_injection()
         int pid;
         char *name;
         char *buffer = (char *)malloc(sizeof(char));
+        buffer[0] = ' ';
         int i = 1;
         int result = 0;
         int nbytes = 0;
         pid = fork();
         if(pid == 0)
         {
-                pipe(fd0);
+                pipe(fd0); 
+                close(fd0[0]);
                 while(1)
                 {
                         name = read_io();
-                        printf("%s\n", name);
                         while(name[nbytes] != '\0')
                         {
                                 write(fd1[0], &name[nbytes], sizeof(char));
                                 nbytes++;
                         }
+                        write(fd1[0], NULL, 0);
                         free(name);
                         nbytes = 0;
                 }
@@ -679,19 +681,24 @@ void interprocess_communication_with_injection()
                 pipe(fd1);
                 while(1)
                 {
+                        close(fd1[1]);
+                        printf("in parent with pid = %d\n", pid);
                         while(read(fd0[1], &buffer[nbytes], sizeof(char)) > 0)
                         {
+                                printf("%c\n", buffer[nbytes]);
+                                if(buffer[nbytes] == '\n')
+                                        break;
                                 nbytes++;
-                                buffer = (char *)realloc(buffer, nbytes+1);
+                                buffer = (char *)realloc(buffer, (nbytes+1)*sizeof(char));
                         }
                         buffer[nbytes] = '\0';
-                        printf("buffer = \"%s\"\n", buffer);
+                        printf("buffer = %s\n", buffer);
                         nbytes = 0;
-                        if(strcmp(buffer, "n_by_2\n\0") == 0)
+                        if(strcmp(buffer, "n_by_2\0") == 0)
                         {
                                 result = n_by_2(i);
                                 printf("%d\n", result);
-                        }else if(strcmp(buffer, "n_by_3\n\0") == 0)
+                        }else if(strcmp(buffer, "n_by_3\0") == 0)
                         {
                                 result = n_by_3(i);
                                 printf("%d\n", result);
