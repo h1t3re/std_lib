@@ -298,6 +298,31 @@ char **strsplit_v1(const char *string, const char *spliter)
         array[a] = '\0';
         return array;
 }
+
+char **get_data_by_key_v1(char *string, char *spliter, char *key)
+{
+        char **array;
+        char **array0 = (char **)malloc(sizeof(char *));
+        int i = 0;
+        int j = 0;
+        int position = -1;
+        array = strsplit_v1(strdup(string), strdup(spliter));
+        while(array[i] != '\0')
+        {
+                position = find_string_position(strdup(array[i]), strdup(key), 1);
+                if(position != 0)
+                {
+                        array0[j] = strdup(array[i]);
+                        j++;
+                        array0 = (char **)realloc(array0, (j+1)*sizeof(char *));
+                }
+                position = -1;
+                i++;
+        }
+        array0[i] = '\0';
+        return array0;
+}
+
 /*
 char *snprintf(int size, char *string, NULL **variables)
 {
